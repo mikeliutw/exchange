@@ -20,6 +20,10 @@ jobs:
           command: |
             sudo apt update
             sudo docker-php-ext-install zip
+      - run:
+          name: "Create Environment file"
+          command: |
+            mv .env.example .env
       - restore_cache:
           keys:
             # "composer.lock" can be used if it is committed to the repo
