@@ -29,7 +29,7 @@ jobs:
             sudo docker-php-ext-install zip
             sudo apt install -y libsqlite3-dev zlib1g-dev
             sudo apt install -y mariadb-client
-            sudo apk add --update --no-cache oniguruma-dev
+            sudo sudo apt install libonig-dev
             sudo sudo docker-php-ext-install -j$(nproc) pdo_mysql bcmath pcntl mbstring
       - run:
           name: "Create Environment file"
