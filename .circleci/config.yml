@@ -16,8 +16,8 @@ jobs:
         environment:
             MYSQL_HOST: 127.0.0.1
             MYSQL_DB: circleci
-            MYSQL_USER: root
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: sail
+            MYSQL_PASSWORD: password
     working_directory: ~/app
     steps:
       - checkout
@@ -30,7 +30,6 @@ jobs:
             sudo apt install -y libsqlite3-dev zlib1g-dev
             sudo apt install -y mariadb-client
             sudo docker-php-ext-install pdo_mysql bcmath pcntl mbstring
-            sudo composer self-update
       - run:
           name: "Create Environment file"
           command: |
