@@ -51,7 +51,7 @@ jobs:
             - ./vendor
       - run:
           name: Mysql database
-          command: mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE circleci;"
+          command: mysql -h 127.0.0.1 -uroot -ppassword -e "CREATE DATABASE circleci;"
       - run:
           name: "Generate App key"
           command: php artisan key:generate
