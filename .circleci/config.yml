@@ -85,7 +85,7 @@ workflows:
                 only: master
       - deploy:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: master
