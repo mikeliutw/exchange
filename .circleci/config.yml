@@ -10,8 +10,15 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       - image: circleci/php:8.0.12-node-browsers-legacy
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0 --server-id=1 --log_bin=ON
+        # 這是測試環境的 MySQL 設定，對應到 .env.circleci 裡面的 DB 設定
+        environment:
+            MYSQL_HOST: 127.0.0.1
+            MYSQL_DB: circleci
+            MYSQL_USER: root
+            MYSQL_ROOT_PASSWORD: root
+    working_directory: ~/app
     steps:
       - checkout
       - run: php --version
@@ -20,6 +27,10 @@ jobs:
           command: |
             sudo apt update
             sudo docker-php-ext-install zip
+            sudo apt install -y libsqlite3-dev zlib1g-dev
+            sudo apt install -y mariadb-client
+            sudo docker-php-ext-install pdo_mysql bcmath pcntl mbstring
+            sudo composer self-update
       - run:
           name: "Create Environment file"
           command: |
@@ -39,9 +50,12 @@ jobs:
           paths:
             - ./vendor
       - run:
+          name: Mysql database
+          command: mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE circleci;"
+      - run:
           name: "Generate App key"
           command: php artisan key:generate
-
+      - run: php artisan migrate --env=circleci
       # run tests with phpunit
       - run:
           name: "Run Unit Tests"
@@ -53,10 +67,25 @@ jobs:
       - run:
           name: "Run Http Tests"
           command: ./vendor/bin/phpunit tests/Feature
+  deploy:
+    machine:
+      image: circleci/classic:edge
+    steps:
+      - run: ssh ${USER_NAME}@${HOST_NAME} 'cd /var/work/twitter-test/ && git pull origin master && sh ./.circleci/deploy.sh'
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   test-workflow:
     jobs:
-      - test
+      - test:
+          filters:
+              branches:
+                only: master
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
