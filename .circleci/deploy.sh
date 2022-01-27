@@ -16,7 +16,7 @@ $docker_command composer install  --no-interaction --no-dev --prefer-dist
 # --prefer-dist  Forces installation from package dist even for dev versions.
 
 # update database
-$docker_command php artisan migrate --force
+#$docker_command php artisan migrate --force
 # --force  Required to run when in production.
 
 # cache boost configuration and routes

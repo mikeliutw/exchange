@@ -40,8 +40,15 @@
 
             </div>
 
+            <div class="row">
+                <h2>Exchange Rate</h2>
+                <div class="col-md-6">
+
+
+                </div>
+
+            </div>
         </div>
-    </div>
 </body>
 
 <script>
