@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/exchange', [Controller::class,'exchange']);
+
+Route::get('/history', [Controller::class,'history']);
