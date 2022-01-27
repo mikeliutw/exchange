@@ -7,6 +7,8 @@ docker_command="docker exec -i $container"
 # shutdown the laravel app
 $docker_command php artisan down
 
+$docker_command git pull
+
 # update PHP dependencies
 $docker_command composer install  --no-interaction --no-dev --prefer-dist
 # --no-interaction Do not ask any interactive question
@@ -22,10 +24,6 @@ $docker_command php artisan cache:clear
 $docker_command php artisan config:cache
 $docker_command php artisan route:cache
 
-# horizon
-$docker_command php artisan horizon:purge
-$docker_command php artisan horizon:terminate
-$docker_command php artisan queue:restart
 
 # rise from the ashes
 $docker_command php artisan up
